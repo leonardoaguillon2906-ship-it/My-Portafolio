@@ -5,8 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-// 💡 Importación directa estándar de marked
-const { marked } = require('marked');
+// ❌ SE ELIMINÓ: const { marked } = require('marked'); <--- Esto rompía Vercel
 
 // Importamos tu controlador original
 const portfolioController = require('../controllers/portfolioController');
@@ -30,9 +29,7 @@ router.get('/dashboard-demo', (req, res) => {
 // 1. Listar todos los artículos del blog
 router.get('/blog', (req, res) => {
     try {
-        // En Vercel, process.cwd() apunta a la raíz del proyecto empaquetado
         const postsDirectory = path.resolve(process.cwd(), 'posts');
-        
         let posts = [];
 
         if (fs.existsSync(postsDirectory)) {
@@ -56,19 +53,18 @@ router.get('/blog', (req, res) => {
         res.render('blog', { title: 'Mi Blog Técnico', posts });
     } catch (error) {
         console.error("❌ Error crítico en la ruta /blog:", error);
-        // Si falla algo, renderizamos la vista de blog vacía en lugar de romper la app
         res.render('blog', { title: 'Mi Blog Técnico', posts: [] });
     }
 });
 
 // 2. Leer un artículo individual dinámicamente usando su slug
-router.get('/blog/:slug', (req, res) => {
+// 💡 Transformamos la función a asíncrona (async) para poder usar el import dinámico
+router.get('/blog/:slug', async (req, res) => {
     try {
         const { slug } = req.params;
         const postsDirectory = path.resolve(process.cwd(), 'posts');
         const fullPath = path.join(postsDirectory, `${slug}.md`);
 
-        // Si el archivo Markdown no existe físicamente en el despliegue
         if (!fs.existsSync(fullPath)) {
             console.warn(`⚠️ Post no encontrado en el sistema de archivos: ${slug}`);
             return res.status(404).send('El artículo que buscas no existe en el blog.');
@@ -77,7 +73,10 @@ router.get('/blog/:slug', (req, res) => {
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
         
-        // Parseamos el contenido de Markdown a HTML
+        // 🔥 Importación dinámica asíncrona que exige Vercel para ES Modules
+        const { marked } = await import('marked');
+        
+        // Parseamos el contenido de Markdown a HTML de manera segura
         const htmlContent = marked.parse(content);
 
         res.render('post', { 
