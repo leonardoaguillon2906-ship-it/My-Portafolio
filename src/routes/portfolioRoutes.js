@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-// 💡 CAMBIO AQUÍ: Importación directa estándar de marked
+// Importación directa estándar de marked
 const { marked } = require('marked');
 
 // Importamos tu controlador original
@@ -30,7 +30,8 @@ router.get('/dashboard-demo', (req, res) => {
 // 1. Listar todos los artículos del blog
 router.get('/blog', (req, res) => {
     try {
-        const postsDirectory = path.join(process.cwd(), 'posts');
+        // AJUSTE AQUÍ: Usamos __dirname retrocediendo dos niveles hacia la raíz para entornos Serverless
+        const postsDirectory = path.join(__dirname, '..', '..', 'posts');
         
         if (!fs.existsSync(postsDirectory)) {
             fs.mkdirSync(postsDirectory);
@@ -63,7 +64,8 @@ router.get('/blog', (req, res) => {
 router.get('/blog/:slug', (req, res) => {
     try {
         const { slug } = req.params;
-        const postsDirectory = path.join(process.cwd(), 'posts');
+        // AJUSTE AQUÍ: Usamos __dirname para asegurar que resuelva correctamente en Vercel
+        const postsDirectory = path.join(__dirname, '..', '..', 'posts');
         const fullPath = path.join(postsDirectory, `${slug}.md`);
 
         if (!fs.existsSync(fullPath)) {
@@ -76,7 +78,7 @@ router.get('/blog/:slug', (req, res) => {
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
         
-        // 💡 CAMBIO AQUÍ: Usamos la función estándar .parse() directamente
+        // Usamos la función estándar .parse() directamente
         const htmlContent = marked.parse(content);
 
         res.render('post', { 
