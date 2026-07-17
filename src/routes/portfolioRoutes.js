@@ -30,12 +30,11 @@ router.get('/dashboard-demo', (req, res) => {
 // 1. Listar todos los artículos del blog
 router.get('/blog', (req, res) => {
     try {
-        // SOLUCIÓN VERCEL: path.resolve garantiza encontrar la raíz del proyecto en entornos Serverless
+        // En Vercel, process.cwd() apunta a la raíz del proyecto empaquetado
         const postsDirectory = path.resolve(process.cwd(), 'posts');
         
         let posts = [];
 
-        // Validamos de forma segura si la carpeta existe antes de leerla
         if (fs.existsSync(postsDirectory)) {
             const fileNames = fs.readdirSync(postsDirectory);
             
@@ -57,7 +56,7 @@ router.get('/blog', (req, res) => {
         res.render('blog', { title: 'Mi Blog Técnico', posts });
     } catch (error) {
         console.error("❌ Error crítico en la ruta /blog:", error);
-        // Enviamos un arreglo vacío en lugar de romper el servidor para que la vista renderice de forma segura
+        // Si falla algo, renderizamos la vista de blog vacía en lugar de romper la app
         res.render('blog', { title: 'Mi Blog Técnico', posts: [] });
     }
 });
@@ -66,21 +65,19 @@ router.get('/blog', (req, res) => {
 router.get('/blog/:slug', (req, res) => {
     try {
         const { slug } = req.params;
-        // SOLUCIÓN VERCEL: path.resolve para la ruta absoluta del archivo Markdown
         const postsDirectory = path.resolve(process.cwd(), 'posts');
         const fullPath = path.join(postsDirectory, `${slug}.md`);
 
+        // Si el archivo Markdown no existe físicamente en el despliegue
         if (!fs.existsSync(fullPath)) {
-            return res.status(404).render('home', {
-                title: '404 - Artículo No Encontrado',
-                error: 'El artículo que buscas no existe en el blog.'
-            });
+            console.warn(`⚠️ Post no encontrado en el sistema de archivos: ${slug}`);
+            return res.status(404).send('El artículo que buscas no existe en el blog.');
         }
 
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
         
-        // Usamos la función estándar .parse() directamente
+        // Parseamos el contenido de Markdown a HTML
         const htmlContent = marked.parse(content);
 
         res.render('post', { 

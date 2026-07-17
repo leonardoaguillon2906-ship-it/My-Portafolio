@@ -18,12 +18,17 @@ app.use(express.urlencoded({ extended: true }));
 // Usar las rutas del portafolio (Incluye las nuevas rutas de tu Blog Técnico)
 app.use('/', portfolioRoutes);
 
-// Manejo de errores 404 (Ruta no encontrada) - Si una ruta o post de blog no existe, renderiza home con error
+// Manejo de errores 404 optimizado para Vercel (Evita buscar vistas inexistentes si falla el nombre)
 app.use((req, res, next) => {
-    res.status(404).render('home', { 
-        title: '404 - Página No Encontrada', 
-        error: 'La sección que buscas no existe en el sistema.' 
-    }); 
+    try {
+        // Intentamos renderizar tu vista principal (cambia 'index' por 'home' si tu archivo se llama home.ejs)
+        res.status(404).render('index', { 
+            title: '404 - Página No Encontrada', 
+            error: 'La sección que buscas no existe en el sistema.' 
+        }); 
+    } catch (e) {
+        res.status(404).send('Página no encontrada.');
+    }
 });
 
 // Manejo de errores global del sistema
