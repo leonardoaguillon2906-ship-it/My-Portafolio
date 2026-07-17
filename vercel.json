@@ -1,4 +1,3 @@
-
 {
   "version": 2,
   "builds": [
@@ -6,11 +5,7 @@
       "src": "api/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "posts/*",
-          "src/views/*",
-          "src/views/partials/*"
-        ]
+        "includeFiles": "posts/*|src/views/*|src/views/partials/*"
       }
     }
   ],
