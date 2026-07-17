@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind Typography para dar un estilo hermoso e idéntico al contenido HTML -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss-typography/0.5.10/typography.min.css" />
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col justify-between font-sans">
@@ -20,7 +19,6 @@
 
     <!-- Contenido Principal -->
     <main class="max-w-3xl mx-auto px-4 py-12 flex-grow w-full">
-        <!-- Renderizar el HTML procesado por Marked usando la clase de Tailwind "prose prose-invert" -->
         <article class="prose prose-invert lg:prose-lg max-w-none">
             <header class="mb-8">
                 <h1 class="text-4xl lg:text-5xl font-black text-white leading-tight"><%= meta.title %></h1>
@@ -34,7 +32,7 @@
                 </div>
             </header>
             <div class="border-t border-gray-800 pt-8">
-                <%- content %> <!-- El signo menos "<%-" le indica a EJS que inserte HTML sin escapar -->
+                <%- content %>
             </div>
         </article>
     </main>

@@ -5,9 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-// Importación moderna y compatible de la librería Marked
-const { Marked } = require('marked');
-const markedInstance = new Marked();
+// 💡 CAMBIO AQUÍ: Importación directa estándar de marked
+const { marked } = require('marked');
 
 // Importamos tu controlador original
 const portfolioController = require('../controllers/portfolioController');
@@ -21,7 +20,6 @@ router.get('/', portfolioController.renderHome);
 // RUTA DE LA VISTA INTERACTIVA (DASHBOARD)
 // ==========================================
 router.get('/dashboard-demo', (req, res) => {
-    // Renderiza la plantilla 'dashboard.ejs' enviando el título correspondiente
     res.render('dashboard', { title: 'LSR Dashboard Generator' });
 });
 
@@ -34,7 +32,6 @@ router.get('/blog', (req, res) => {
     try {
         const postsDirectory = path.join(process.cwd(), 'posts');
         
-        // Si por alguna razón la carpeta no existe, la creamos para que no rompa el sistema
         if (!fs.existsSync(postsDirectory)) {
             fs.mkdirSync(postsDirectory);
         }
@@ -69,7 +66,6 @@ router.get('/blog/:slug', (req, res) => {
         const postsDirectory = path.join(process.cwd(), 'posts');
         const fullPath = path.join(postsDirectory, `${slug}.md`);
 
-        // Si el archivo del artículo no existe, renderizamos tu página de inicio con error
         if (!fs.existsSync(fullPath)) {
             return res.status(404).render('home', {
                 title: '404 - Artículo No Encontrado',
@@ -80,8 +76,8 @@ router.get('/blog/:slug', (req, res) => {
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const { data, content } = matter(fileContents);
         
-        // Procesamos el contenido Markdown transformándolo a HTML puro
-        const htmlContent = markedInstance.parse(content);
+        // 💡 CAMBIO AQUÍ: Usamos la función estándar .parse() directamente
+        const htmlContent = marked.parse(content);
 
         res.render('post', { 
             title: data.title, 
