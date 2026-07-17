@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <!-- Incluimos Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Navegación simple -->
+    <header class="border-b border-gray-800 py-6">
+        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+            <a href="/" class="text-xl font-bold text-indigo-400">← Volver al Portafolio</a>
+            <h1 class="text-lg font-semibold text-gray-400">Leonardo Blog</h1>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-4xl mx-auto px-4 py-12 flex-grow w-full">
+        <h2 class="text-4xl font-extrabold text-white mb-2">Artículos Recientes</h2>
+        <p class="text-gray-400 mb-10">Espacio donde comparto guías, tutoriales y apuntes sobre desarrollo web y ciberseguridad.</p>
+
+        <% if (posts.length === 0) { %>
+            <p class="text-gray-500 italic">Próximamente estaré publicando mis primeros artículos. ¡Mantente al tanto!</p>
+        <% } else { %>
+            <div class="grid gap-8">
+                <% posts.forEach(post => { %>
+                    <article class="p-6 bg-gray-800/50 rounded-lg border border-gray-800 hover:border-indigo-500 transition duration-300">
+                        <span class="text-sm text-indigo-400 font-semibold"><%= post.date %></span>
+                        <h3 class="text-2xl font-bold text-white mt-2 mb-3">
+                            <a href="/blog/<%= post.slug %>" class="hover:underline"><%= post.title %></a>
+                        </h3>
+                        <p class="text-gray-400 mb-4"><%= post.description %></p>
+                        <div class="flex gap-2">
+                            <% if (post.tags) { %>
+                                <% post.tags.forEach(tag => { %>
+                                    <span class="bg-gray-800 text-xs text-gray-300 px-3 py-1 rounded-full"><%= tag %></span>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-6 text-center text-sm text-gray-500">
+        <p>&copy; 2026 Leonardo. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

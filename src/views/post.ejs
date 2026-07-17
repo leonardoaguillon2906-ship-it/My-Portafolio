@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Typography para dar un estilo hermoso e idéntico al contenido HTML -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss-typography/0.5.10/typography.min.css" />
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Navegación -->
+    <header class="border-b border-gray-800 py-6">
+        <div class="max-w-3xl mx-auto px-4 flex justify-between items-center">
+            <a href="/blog" class="text-indigo-400 font-medium">← Volver al Blog</a>
+            <span class="text-sm text-gray-500"><%= meta.date %></span>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-3xl mx-auto px-4 py-12 flex-grow w-full">
+        <!-- Renderizar el HTML procesado por Marked usando la clase de Tailwind "prose prose-invert" -->
+        <article class="prose prose-invert lg:prose-lg max-w-none">
+            <header class="mb-8">
+                <h1 class="text-4xl lg:text-5xl font-black text-white leading-tight"><%= meta.title %></h1>
+                <p class="text-gray-400 text-lg italic mt-4"><%= meta.description %></p>
+                <div class="flex gap-2 mt-4">
+                    <% if (meta.tags) { %>
+                        <% meta.tags.forEach(tag => { %>
+                            <span class="bg-gray-800 text-xs text-gray-300 px-3 py-1 rounded-full"><%= tag %></span>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </header>
+            <div class="border-t border-gray-800 pt-8">
+                <%- content %> <!-- El signo menos "<%-" le indica a EJS que inserte HTML sin escapar -->
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-6 text-center text-sm text-gray-500">
+        <p>&copy; 2026 Leonardo. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

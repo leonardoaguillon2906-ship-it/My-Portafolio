@@ -15,10 +15,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
-// Usar las rutas del portafolio
+// Usar las rutas del portafolio (Incluye las nuevas rutas de tu Blog Técnico)
 app.use('/', portfolioRoutes);
 
-// Manejo de errores 404 (Ruta no encontrada)
+// Manejo de errores 404 (Ruta no encontrada) - Si una ruta o post de blog no existe, renderiza home con error
 app.use((req, res, next) => {
     res.status(404).render('home', { 
         title: '404 - Página No Encontrada', 
