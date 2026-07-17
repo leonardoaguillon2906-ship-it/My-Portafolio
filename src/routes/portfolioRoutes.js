@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
 
-// Importación directa estándar de marked
+// 💡 Importación directa estándar de marked
 const { marked } = require('marked');
 
 // Importamos tu controlador original
@@ -30,33 +30,35 @@ router.get('/dashboard-demo', (req, res) => {
 // 1. Listar todos los artículos del blog
 router.get('/blog', (req, res) => {
     try {
-        // AJUSTE AQUÍ: Usamos __dirname retrocediendo dos niveles hacia la raíz para entornos Serverless
-        const postsDirectory = path.join(__dirname, '..', '..', 'posts');
+        // SOLUCIÓN VERCEL: path.resolve garantiza encontrar la raíz del proyecto en entornos Serverless
+        const postsDirectory = path.resolve(process.cwd(), 'posts');
         
-        if (!fs.existsSync(postsDirectory)) {
-            fs.mkdirSync(postsDirectory);
+        let posts = [];
+
+        // Validamos de forma segura si la carpeta existe antes de leerla
+        if (fs.existsSync(postsDirectory)) {
+            const fileNames = fs.readdirSync(postsDirectory);
+            
+            posts = fileNames
+                .filter(fileName => fileName.endsWith('.md'))
+                .map(fileName => {
+                    const slug = fileName.replace(/\.md$/, '');
+                    const fullPath = path.join(postsDirectory, fileName);
+                    const fileContents = fs.readFileSync(fullPath, 'utf8');
+                    const { data } = matter(fileContents);
+
+                    return {
+                        slug,
+                        ...data
+                    };
+                });
         }
-
-        const fileNames = fs.readdirSync(postsDirectory);
-        
-        const posts = fileNames
-            .filter(fileName => fileName.endsWith('.md'))
-            .map(fileName => {
-                const slug = fileName.replace(/\.md$/, '');
-                const fullPath = path.join(postsDirectory, fileName);
-                const fileContents = fs.readFileSync(fullPath, 'utf8');
-                const { data } = matter(fileContents);
-
-                return {
-                    slug,
-                    ...data
-                };
-            });
 
         res.render('blog', { title: 'Mi Blog Técnico', posts });
     } catch (error) {
-        console.error("❌ Error en la ruta /blog:", error);
-        res.status(500).send('Algo salió mal en el servidor.');
+        console.error("❌ Error crítico en la ruta /blog:", error);
+        // Enviamos un arreglo vacío en lugar de romper el servidor para que la vista renderice de forma segura
+        res.render('blog', { title: 'Mi Blog Técnico', posts: [] });
     }
 });
 
@@ -64,8 +66,8 @@ router.get('/blog', (req, res) => {
 router.get('/blog/:slug', (req, res) => {
     try {
         const { slug } = req.params;
-        // AJUSTE AQUÍ: Usamos __dirname para asegurar que resuelva correctamente en Vercel
-        const postsDirectory = path.join(__dirname, '..', '..', 'posts');
+        // SOLUCIÓN VERCEL: path.resolve para la ruta absoluta del archivo Markdown
+        const postsDirectory = path.resolve(process.cwd(), 'posts');
         const fullPath = path.join(postsDirectory, `${slug}.md`);
 
         if (!fs.existsSync(fullPath)) {
@@ -88,7 +90,7 @@ router.get('/blog/:slug', (req, res) => {
         });
     } catch (error) {
         console.error("❌ Error en la ruta /blog/:slug:", error);
-        res.status(500).send('Algo salió mal en el servidor.');
+        res.status(500).send('Algo salió mal en el servidor al cargar el artículo.');
     }
 });
 
