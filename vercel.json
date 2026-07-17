@@ -14,7 +14,10 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": "posts/** && src/views/**"
+      "includeFiles": [
+        "posts/**",
+        "src/views/**"
+      ]
     }
   }
 }
