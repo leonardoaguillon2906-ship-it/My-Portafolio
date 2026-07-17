@@ -1,0 +1,41 @@
+<!-- src/views/partials/terminal.ejs -->
+<div class="card-3d card-neon-cyan bg-slate-950/40 p-6 rounded-3xl border border-cyan-500/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all duration-300" data-aos="fade-left">
+    <div class="flex justify-between items-center mb-5 border-b border-cyan-500/10 pb-3">
+        <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-terminal animate-pulse"></i> Terminal Interactiva
+        </span>
+        <div class="flex gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-green-500/60"></span>
+        </div>
+    </div>
+
+    <!-- Contenedor principal de la Terminal -->
+    <div id="terminal-container" class="bg-[#030712] font-mono text-[10px] md:text-xs text-cyan-400 p-5 rounded-xl h-[280px] overflow-y-auto shadow-inner space-y-2.5 cursor-text">
+        
+        <!-- Salida de comandos -->
+        <div id="terminal-output" class="space-y-1.5 whitespace-pre-wrap">
+LSR Security OS [Version 1.0.4]
+(c) 2026 LSR Corp. Todos los derechos reservados.
+
+Escribe 'help' para ver los comandos disponibles.
+<span class="text-slate-500">// Simulación de Honeypot / Terminal</span>
+        </div>
+
+        <!-- Línea de entrada de comando actual -->
+        <div class="flex items-center gap-1.5">
+            <span class="text-emerald-400 font-bold">lsr@cyber-sec</span><span class="text-slate-400">:</span><span class="text-indigo-400">~</span><span class="text-cyan-400">$</span>
+            <input 
+                type="text" 
+                id="terminal-input" 
+                class="flex-1 bg-transparent text-cyan-400 outline-none caret-cyan-400" 
+                spellcheck="false"
+                autocomplete="off"
+            >
+        </div>
+    </div>
+</div>
+
+<!-- Cargamos el script de la terminal directamente acoplado al parcial -->
+<script src="/js/terminal.js"></script>

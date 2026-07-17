@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | LSR</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js para los gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-[#030712] text-slate-100 min-h-screen font-sans selection:bg-indigo-500/30">
+
+    <!-- Barra de Navegación del Dashboard -->
+    <header class="border-b border-slate-900 bg-slate-950/60 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-indigo-400 font-bold tracking-wider text-lg">
+                    <i class="fa-solid fa-chart-line mr-2"></i>LSR Analyzer
+                </span>
+                <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2.5 py-0.5 rounded-full border border-indigo-500/20 font-mono">
+                    v1.2 (Autodetectar Columnas)
+                </span>
+            </div>
+            <!-- Botón para volver al Portafolio -->
+            <a href="/" class="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Volver al Portafolio
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Título principal -->
+        <div class="mb-10">
+            <h1 class="text-3xl font-bold text-white mb-2">Generador de Dashboard con Google Sheets</h1>
+            <p class="text-sm text-slate-400">Transforma instantáneamente cualquier documento de Google Sheets en un panel de control interactivo visual.</p>
+        </div>
+
+        <!-- Caja de Entrada de URL -->
+        <div class="bg-slate-900/40 border border-slate-800/80 p-6 rounded-3xl mb-8">
+            <label for="sheet-url" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
+                Introduce la URL pública de tu Google Sheet
+            </label>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input 
+                    type="url" 
+                    id="sheet-url" 
+                    placeholder="https://docs.google.com/spreadsheets/d/.../edit?usp=sharing" 
+                    value="https://docs.google.com/spreadsheets/d/1ZMEJ4HsaWMqxSRMcxiaOHWxqydUWFx9n9oDG59uVHao/edit?gid=2066880309#gid=2066880309"
+                    class="flex-1 bg-slate-950 border border-slate-800/80 rounded-2xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                >
+                <button 
+                    onclick="processSheetData()" 
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-6 py-3 rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+                >
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Procesar Datos
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-3">
+                <i class="fa-solid fa-circle-info mr-1"></i> Asegúrate de que el documento esté compartido como <strong class="text-indigo-400">"Cualquier persona con el enlace puede ver"</strong>.
+            </p>
+        </div>
+
+        <!-- Zona del Dashboard (Gráficos) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Tarjeta de Estadísticas Rápidas -->
+            <div class="bg-slate-900/40 border border-slate-800/80 p-6 rounded-3xl flex flex-col justify-between min-h-[180px]">
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-400 uppercase">Monto Consolidado</h3>
+                    <p id="total-count" class="text-3xl font-bold text-emerald-400 mt-3">$ 0</p>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-800/40 text-[11px] text-slate-500 flex justify-between items-center">
+                    <span>Sincronización en vivo</span>
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Gráfico Principal (Ocupa 2 columnas en pantallas grandes) -->
+            <div class="lg:col-span-2 bg-slate-900/40 border border-slate-800/80 p-6 rounded-3xl">
+                <h3 class="text-sm font-semibold text-slate-400 uppercase mb-4">Análisis de Datos</h3>
+                <div class="h-64 flex items-center justify-center">
+                    <canvas id="myChart" class="w-full h-full"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script de procesamiento de datos interactivo corregido -->
+    <script>
+        let myChartInstance = null;
+
+        async function processSheetData() {
+            const urlInput = document.getElementById('sheet-url').value.trim();
+            const totalCountElement = document.getElementById('total-count');
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            if (!urlInput) {
+                alert("Por favor, introduce una URL de Google Sheets.");
+                return;
+            }
+
+            try {
+                // 1. Extraer el ID del documento
+                const matches = urlInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                if (!matches || !matches[1]) {
+                    alert("No se pudo extraer el ID del documento. Comprueba el enlace.");
+                    return;
+                }
+                const sheetId = matches[1];
+
+                // 2. Extraer el gid de la pestaña específica
+                const gidMatches = urlInput.match(/[#&]gid=([0-9]+)/);
+                const gid = gidMatches ? gidMatches[1] : '0';
+
+                // 3. Generar URL de descarga a CSV
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error("Acceso denegado. Asegúrate de compartir el documento como 'Cualquier persona con el enlace puede ver'.");
+                }
+
+                const csvText = await response.text();
+
+                // 4. Procesar filas del CSV
+                const rows = csvText.split('\n').map(row => {
+                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
+                }).filter(row => row.length > 1 && row[0] !== "");
+
+                if (rows.length <= 1) {
+                    alert("No hay suficientes registros en la hoja de cálculo.");
+                    return;
+                }
+
+                const headers = rows[0];
+                const dataRows = rows.slice(1);
+
+                // --- DETECCIÓN INTELIGENTE DE COLUMNAS ---
+                // Buscaremos qué índice tiene el valor numérico (Monto, Valor, Total, etc.)
+                let valueColIndex = 2; // Por defecto asumimos la columna C (índice 2)
+                const numericKeywords = ['monto', 'valor', 'total', 'precio', 'cantidad'];
+                
+                const foundIndex = headers.findIndex(h => 
+                    numericKeywords.some(keyword => h.toLowerCase().includes(keyword))
+                );
+                
+                if (foundIndex !== -1) {
+                    valueColIndex = foundIndex;
+                }
+
+                const labels = [];
+                const values = [];
+                let grandTotal = 0;
+
+                dataRows.forEach(row => {
+                    // Eje X: Usamos la primera columna (Fecha)
+                    labels.push(row[0]); 
+                    
+                    // Eje Y: Usamos la columna detectada inteligentemente (Monto)
+                    const rawValue = row[valueColIndex] ? row[valueColIndex].replace(/[\$\s,.]/g, '') : "0";
+                    
+                    // En Colombia 150000 puede no tener decimales. Dividimos si se detecta un formato con centavos agregados, 
+                    // pero para enteros planos lo convertimos directamente a Float.
+                    const numValue = parseFloat(rawValue) || 0;
+                    
+                    values.push(numValue);
+                    grandTotal += numValue;
+                });
+
+                // 5. Actualizar el indicador de Monto Consolidado (Moneda local COP)
+                totalCountElement.innerText = grandTotal.toLocaleString('es-CO', { 
+                    style: 'currency', 
+                    currency: 'COP', 
+                    minimumFractionDigits: 0 
+                });
+
+                // 6. Destruir el gráfico viejo para evitar superposiciones de datos
+                if (myChartInstance) {
+                    myChartInstance.destroy();
+                }
+
+                // 7. Inicializar gráfico de líneas
+                myChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: headers[valueColIndex] || 'Monto',
+                            data: values,
+                            borderColor: '#6366f1', // Indigo
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)', 
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#10b981', // Puntos verde esmeralda
+                            pointBorderColor: '#030712',
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#94a3b8', font: { family: 'monospace' } }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { 
+                                    color: '#94a3b8',
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString('es-CO');
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#94a3b8', font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error cargando el Sheets:", error);
+                alert("Ocurrió un error al procesar el archivo: " + error.message);
+            }
+        }
+
+        // Ejecutar carga automática con la URL por defecto al iniciar la vista
+        window.addEventListener('DOMContentLoaded', () => {
+            processSheetData();
+        });
+    </script>
+</body>
+</html>
