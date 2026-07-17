@@ -11,13 +11,5 @@
       "src": "/(.*)",
       "dest": "api/index.js"
     }
-  ],
-  "functions": {
-    "api/index.js": {
-      "includeFiles": [
-        "posts/**",
-        "src/views/**"
-      ]
-    }
-  }
+  ]
 }
