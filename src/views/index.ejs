@@ -145,17 +145,6 @@
             ></span>
           </a>
 
-          <!-- Enlace: Blog Técnico (¡NUEVO!) -->
-          <a
-            href="/blog"
-            class="relative py-2 text-slate-400 hover:text-slate-100 transition-colors duration-300 group/link"
-          >
-            Blog
-            <span
-              class="absolute bottom-0 left-0 w-0 h-[2px] bg-indigo-500 transition-all duration-300 group-hover/link:w-full"
-            ></span>
-          </a>
-
           <!-- Botón de Contacto (Estilo Neón Futurista) -->
           <a
             href="#contacto"
@@ -785,147 +774,117 @@
       </div>
     </section>
 
-    <section
-      id="casos-practicos"
-      class="max-w-7xl mx-auto px-6 py-24 border-t border-slate-900/80"
+   <section
+  id="casos-practicos"
+  class="max-w-7xl mx-auto px-6 py-24 border-t border-slate-900/80"
+>
+  <h2 class="text-3xl font-bold text-center mb-16" data-aos="fade-up">
+    Casos Prácticos Demostrables
+  </h2>
+
+  <!-- Contenedor con la clase 'grid' añadida para activar las columnas -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- TARJETA 1: AUTOMATIZACIÓN DE BACKUPS ENCRIPTADOS -->
+    <div
+      class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
+      data-aos="fade-right"
     >
-      <h2 class="text-3xl font-bold text-center mb-16" data-aos="fade-up">
-        Casos Prácticos Demostrables
-      </h2>
-
-      <!-- Contenedor con la clase 'grid' añadida para activar las columnas -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- TARJETA 1: AUTOMATIZACIÓN DE BACKUPS ENCRIPTADOS -->
-        <div
-          class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
-          data-aos="fade-right"
-        >
-          <div>
-            <div class="flex justify-between items-start mb-6">
-              <span
-                class="text-xs font-semibold text-emerald-400 uppercase tracking-wider"
-              >
-                DevOps / Soporte L2
-              </span>
-              <i
-                class="fa-solid fa-code-branch text-2xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"
-              ></i>
-            </div>
-
-            <h3 class="text-xl font-bold mb-4">
-              Automatización de Backups Encriptados
-            </h3>
-            <p class="text-slate-400 text-sm leading-relaxed mb-6">
-              Desarrollo de scripts que programan y ejecutan respaldos
-              automatizados de bases de datos críticas, encriptando los archivos
-              antes de cargarlos en nubes seguras.
-            </p>
-          </div>
-
-          <div
-            class="flex flex-wrap gap-2 text-xs pt-4 border-t border-slate-800/40"
-          >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >Python</span
-            >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >PostgreSQL</span
-            >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >Bash</span
-            >
-          </div>
+      <div>
+        <div class="flex justify-between items-start mb-6">
+          <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+            DevOps / Soporte L2
+          </span>
+          <i class="fa-solid fa-code-branch text-2xl text-emerald-400 group-hover:rotate-12 transition-transform duration-300"></i>
         </div>
-
-        <!-- TARJETA 2: GENERADOR DE DASHBOARDS INTERACTIVOS (NUEVA) -->
-        <div
-          class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
-          data-aos="fade-up"
-        >
-          <div>
-            <div class="flex justify-between items-start mb-6">
-              <span
-                class="text-xs font-semibold text-indigo-400 uppercase tracking-wider"
-              >
-                DevOps / Automatización
-              </span>
-              <i
-                class="fa-solid fa-chart-simple text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"
-              ></i>
-            </div>
-
-            <h3 class="text-xl font-bold mb-4">Interactive Sheets Dashboard</h3>
-            <p class="text-slate-400 text-sm leading-relaxed mb-6">
-              Generador automatizado de paneles de control y gráficas dinámicas
-              en tiempo real consumiendo datos directamente desde URLs públicas
-              de Google Sheets.
-            </p>
-          </div>
-
-          <div class="flex flex-col gap-4 pt-4 border-t border-slate-800/40">
-            <div class="flex flex-wrap gap-2 text-xs">
-              <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-                >Node.js</span
-              >
-              <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-                >Express</span
-              >
-              <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-                >Chart.js</span
-              >
-            </div>
-            <a
-              href="/dashboard-demo"
-              class="inline-flex items-center gap-2 text-xs text-emerald-400 font-bold hover:text-emerald-300 transition-colors self-start"
-            >
-              Probar herramienta <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- TARJETA 3: LABORATORIO DE VULNERABILIDADES -->
-        <div
-          class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
-          data-aos="fade-left"
-        >
-          <div>
-            <div class="flex justify-between items-start mb-6">
-              <span
-                class="text-xs font-semibold text-cyan-400 uppercase tracking-wider"
-              >
-                Ciberseguridad / Pentesting
-              </span>
-              <i
-                class="fa-solid fa-shield-halved text-2xl text-cyan-400 group-hover:scale-110 transition-transform duration-300"
-              ></i>
-            </div>
-
-            <h3 class="text-xl font-bold mb-4">
-              Laboratorio de Vulnerabilidades
-            </h3>
-            <p class="text-slate-400 text-sm leading-relaxed mb-6">
-              Creación de redes virtuales cerradas simulando servidores Linux
-              reales con debilidades lógicas y de sistema (OWASP Top 10) para
-              auditar y documentar parches de seguridad.
-            </p>
-          </div>
-
-          <div
-            class="flex flex-wrap gap-2 text-xs pt-4 border-t border-slate-800/40"
-          >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >Kali Linux</span
-            >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >VirtualBox</span
-            >
-            <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg"
-              >Hardening</span
-            >
-          </div>
-        </div>
+        
+        <h3 class="text-xl font-bold mb-4">
+          Automatización de Backups Encriptados
+        </h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Desarrollo de scripts que programan y ejecutan respaldos
+          automatizados de bases de datos críticas, encriptando los archivos
+          antes de cargarlos en nubes seguras.
+        </p>
       </div>
-    </section>
+
+      <div class="flex flex-wrap gap-2 text-xs pt-4 border-t border-slate-800/40">
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Python</span>
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">PostgreSQL</span>
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Bash</span>
+      </div>
+    </div>
+
+    <!-- TARJETA 2: GENERADOR DE DASHBOARDS INTERACTIVOS (NUEVA) -->
+    <div
+      class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
+      data-aos="fade-up"
+    >
+      <div>
+        <div class="flex justify-between items-start mb-6">
+          <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
+            DevOps / Automatización
+          </span>
+          <i class="fa-solid fa-chart-simple text-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+
+        <h3 class="text-xl font-bold mb-4">
+          Interactive Sheets Dashboard
+        </h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Generador automatizado de paneles de control y gráficas
+          dinámicas en tiempo real consumiendo datos directamente desde
+          URLs públicas de Google Sheets.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4 pt-4 border-t border-slate-800/40">
+        <div class="flex flex-wrap gap-2 text-xs">
+          <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Node.js</span>
+          <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Express</span>
+          <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Chart.js</span>
+        </div>
+        <a
+          href="/dashboard-demo"
+          class="inline-flex items-center gap-2 text-xs text-emerald-400 font-bold hover:text-emerald-300 transition-colors self-start"
+        >
+          Probar herramienta <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- TARJETA 3: LABORATORIO DE VULNERABILIDADES -->
+    <div
+      class="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 hover:bg-slate-900/60 transition-all duration-300 group flex flex-col justify-between"
+      data-aos="fade-left"
+    >
+      <div>
+        <div class="flex justify-between items-start mb-6">
+          <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">
+            Ciberseguridad / Pentesting
+          </span>
+          <i class="fa-solid fa-shield-halved text-2xl text-cyan-400 group-hover:scale-110 transition-transform duration-300"></i>
+        </div>
+        
+        <h3 class="text-xl font-bold mb-4">
+          Laboratorio de Vulnerabilidades
+        </h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Creación de redes virtuales cerradas simulando servidores Linux
+          reales con debilidades lógicas y de sistema (OWASP Top 10) para
+          auditar y documentar parches de seguridad.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2 text-xs pt-4 border-t border-slate-800/40">
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Kali Linux</span>
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">VirtualBox</span>
+        <span class="bg-slate-800/60 text-slate-300 px-3 py-1 rounded-lg">Hardening</span>
+      </div>
+    </div>
+
+  </div>
+</section>
     <section
       id="contacto"
       class="bg-[#020617] py-24 border-t border-slate-900/80"
